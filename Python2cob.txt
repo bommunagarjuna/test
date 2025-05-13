@@ -1,0 +1,65 @@
+def calculate_loan():
+    loan_amount_in = "30000"
+    interest_in = "0.09"
+    no_of_periods_in = "24"
+
+    loan_amount = float(loan_amount_in)
+    interest = float(interest_in)
+    no_of_periods = int(no_of_periods_in)
+
+    # Calculate annuity amount required
+    monthly_interest = interest / 12
+    payment = loan_amount * (monthly_interest * (1 + monthly_interest) ** no_of_periods) / ((1 + monthly_interest) ** no_of_periods - 1)
+
+    output_line = f"COBLOAN: Repayment amount for a {no_of_periods_in} month loan of {loan_amount_in} at {interest_in} interest is: {payment:.2f}"
+    print(output_line)
+
+    return "OK"
+
+
+def calculate_value():
+    interest_in = "0.125"
+    no_of_periods_in = "5"
+
+    interest = float(interest_in)
+    no_of_periods = int(no_of_periods_in)
+
+    # Hardcoded cash flows for simplicity
+    value_amount = [5069, 8375, 44, 0, 0]  # Example values
+
+    # Calculate present value
+    payment = sum([value / (1 + interest) ** t for t, value in enumerate(value_amount, 1)])
+
+    output_line = f"COBVALU: Present value for rate of {interest_in} given amounts {value_amount} is: {payment:.2f}"
+    print(output_line)
+
+    return "OK"
+
+
+def main():
+    print("CALC Begins.")
+
+    buffer_array = ["LOAN", "PVALUE", "pvalue", "END"]
+
+    buffer_ptr = 0
+    while True:
+        input_1 = buffer_array[buffer_ptr]
+        buffer_ptr += 1
+
+        if input_1.upper() == "END":
+            print("CALC Ends.")
+            break
+        elif input_1.upper() == "LOAN":
+            feedback = calculate_loan()
+            if feedback != "OK":
+                print("Call to COBLOAN Unsuccessful.")
+        elif input_1.upper() == "PVALUE":
+            feedback = calculate_value()
+            if feedback != "OK":
+                print("Call to COBVALU Unsuccessful.")
+        else:
+            print(f"Invalid input: {input_1}")
+
+
+if __name__ == "__main__":
+    main()
